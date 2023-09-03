@@ -81,9 +81,7 @@ class GenerationWindow(QWidget):
         self.prompt.setFixedHeight(100)
         self.prompt.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
         self.prompt.setTabChangesFocus(True)
-        self.layout.addWidget(self.prompt)
-        
-        
+        self.layout.addWidget(self.prompt) 
 
         #negative prompt
         self.negative_prompt_label = QLabel("Negative Prompt")
@@ -103,8 +101,6 @@ class GenerationWindow(QWidget):
         self.steps_slider.setRange(0, 150)
         self.steps_slider.setValue(12)
         self.steps_slider.valueChanged.connect(self.update_steps_label)
-
-        
 
         #Denoising slider
         self.denoise_label= QLabel("Denoising: 0.3")

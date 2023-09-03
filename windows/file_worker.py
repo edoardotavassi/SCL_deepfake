@@ -199,9 +199,7 @@ class Worker(QRunnable):
         """Generate the mask image"""
 
         def convex_hull_graham(points):
-            '''
-            Returns points on convex hull in CCW order according to Graham's scan algorithm. 
-            '''
+            """Returns points on convex hull in CCW order according to Graham's scan algorithm. """
             TURN_LEFT, TURN_RIGHT, TURN_NONE = (1, -1, 0)
 
             def cmp(a, b):
@@ -284,13 +282,10 @@ class Worker(QRunnable):
                 
                 mask = mask[y:y+h+30, x:x+w+30]
 
-                """Test"""
                 mask = cv2.erode(mask, np.ones((33,33), np.uint8), iterations=2)
                 mask = cv2.GaussianBlur(mask, (221, 221), 0)
 
                 #save mask image to folder 
-                #convert to uint8
-                #mask.dtype = 'uint8'
                 cv2.imwrite(os.path.join(dir_path, f"frame{frame_count}.png"), mask)
 
                 #temp image

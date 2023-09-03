@@ -79,7 +79,6 @@ class Worker(QRunnable):
     def single_frame(self):
         """Call Server to test single frame"""
 
-        
         payload = generate_payload(
             file=os.path.join(self.basedir, "..", "VideoFiles", "cropped_frames", f"frame{self.frame_number}.png"), 
             prompt=self.prompt, 
@@ -96,6 +95,7 @@ class Worker(QRunnable):
         t.start()
         
         response = requests.post(url=f'{self.url}/controlnet/img2img', json=payload)
+        
         #stop the progress bar animation
         self.done = True
         self.signals.progress_image.emit("", 100)

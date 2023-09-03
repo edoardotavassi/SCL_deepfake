@@ -4,17 +4,13 @@ from PyQt6.QtCore import (
     pyqtSignal,
     pyqtSlot,
 )
-
-
 import os
 import sys
 import cv2
 import re
 import numpy as np
 import glob
-import functools
 import shutil
-import pickle as pkl
 import mediapipe as mp
 
 class WorkerKilledException(Exception):

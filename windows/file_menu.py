@@ -1,36 +1,22 @@
 from PyQt6.QtCore import (
-    QObject,
-    QRunnable,
     pyqtSignal,
-    pyqtSlot,
     QThreadPool
 )
 from PyQt6.QtWidgets import (
-    QHBoxLayout,
     QLabel,
     QPushButton,
     QVBoxLayout,
-    QSlider,
     QWidget,
     QProgressBar ,
     QFileDialog 
 )
-
 import os
 import sys
-import cv2
-import re
-import numpy as np
-import glob
-import functools
 import shutil
-import pickle as pkl
-import mediapipe as mp
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget
 from custom_widgets.image_viewer import ImageViewer
-
 from .file_worker import Worker
+
 class FileMenu(QWidget):
 
     generation_signal = pyqtSignal()

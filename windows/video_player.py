@@ -1,13 +1,24 @@
-import sys
-from PyQt6.QtCore import QStandardPaths, Qt, pyqtSlot, QUrl
-from PyQt6.QtGui import QAction, QIcon, QKeySequence, QScreen
-from PyQt6.QtWidgets import (QApplication, QDialog, QFileDialog,
-    QMainWindow, QSlider, QStyle, QToolBar)
-from PyQt6.QtMultimedia import (QAudio, QAudioOutput, QMediaFormat,
-                                  QMediaPlayer)
+from PyQt6.QtCore import (
+    QStandardPaths, 
+    Qt,  
+    QUrl
+    )
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import (
+    QDialog, 
+    QFileDialog,
+    QMainWindow, 
+    QStyle, 
+    QToolBar
+    )
+from PyQt6.QtMultimedia import (
+    QAudioOutput, 
+    QMediaFormat,
+    QMediaPlayer
+    )
 from PyQt6.QtMultimediaWidgets import QVideoWidget
-
 import os
+import sys
 import shutil
 
 AVI = "video/x-msvideo"
@@ -33,7 +44,6 @@ class VideoPlayer(QMainWindow):
         self.media_player.setAudioOutput(self.audio_output)
 
         #self.media_player.errorOccurred.connect(self.error_alert)
-
         self.tool_bar = QToolBar()
         self.tool_bar.setFloatable(False)
         self.addToolBar(self.tool_bar)

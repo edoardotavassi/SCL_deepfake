@@ -1,11 +1,3 @@
-from PyQt6.QtCore import (
-    Qt,
-    QObject,
-    QRunnable,
-    pyqtSignal,
-    pyqtSlot,
-    QThreadPool
-)
 from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -17,20 +9,9 @@ from PyQt6.QtWidgets import (
     QFileDialog,
     QLineEdit
 )
-
-import os
-import sys
-import cv2
-import re
-import numpy as np
-import glob
-import functools
-import shutil
-import pickle as pkl
-import mediapipe as mp
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget
-from custom_widgets.image_viewer import ImageViewer
 
 class TrainingHelper(QWidget):
 
@@ -127,7 +108,6 @@ class TrainingHelper(QWidget):
 
 
         #progress bar
-        
         self.progress_bar = QProgressBar()
         self.progress_bar.setRange(0, 100)
         #self.progress_bar.setValue(0)

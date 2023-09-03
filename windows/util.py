@@ -1,7 +1,6 @@
 import io
 from PIL import Image
 import base64
-import os
 
 def b64_img(image: Image):
         """Converts an image to base64"""
