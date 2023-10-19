@@ -25,5 +25,4 @@ In these two images, we can observe how the software is capable of using SD, Con
 <p align="center">
   <img src="https://github.com/edoardotavassi/SCL_deepfake/blob/main/readme_elements/generation-window.png" width="350" title="Pipeline.">
 </p>
-The GUI assists the user in interacting with the [SD webui API](https://github.com/AUTOMATIC1111/
-stable-diffusion-webui) and [LoRA training](https://github.com/bmaltais/kohya_ss). Simultaneously, it provides all the essential processing features needed to create deepfakes.
+The GUI assists the user in interacting with the [SD webui API](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and [LoRA training](https://github.com/bmaltais/kohya_ss). Simultaneously, it provides all the essential processing features needed to create deepfakes.
