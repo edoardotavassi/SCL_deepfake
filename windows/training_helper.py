@@ -9,15 +9,23 @@ from PyQt6.QtWidgets import (
     QFileDialog,
     QLineEdit
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import (
+    Qt,
+    pyqtSignal,
+    QThreadPool
+)
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget
+
+from .training_worker import Worker
 
 class TrainingHelper(QWidget):
 
     def __init__(self):
         super().__init__()
         self.layout = QVBoxLayout()
+        self.threadpool = QThreadPool()
+
 
         #video
         self.video_layout = QHBoxLayout()
@@ -34,50 +42,7 @@ class TrainingHelper(QWidget):
 
         self.layout.addLayout(self.video_layout)
 
-        #image
-        self.image_layout = QHBoxLayout()
-        self.image_label = QLabel("Image folder: ")
-        self.image_layout.addWidget(self.image_label)
-
-        self.image_input=QLineEdit()
-        #self.image_input.textChanged.connect(self.image_input_changed)
-        self.image_layout.addWidget(self.image_input)
-
-        self.image_button = QPushButton("Open Folder")
-        self.image_button.clicked.connect(self.get_image_folder)
-        self.image_layout.addWidget(self.image_button)
-
-        self.layout.addLayout(self.image_layout)
-
-        #log
-        self.log_layout = QHBoxLayout()
-        self.log_label = QLabel("Log folder: ")
-        self.log_layout.addWidget(self.log_label)
-
-        self.log_input=QLineEdit()
-        #self.log_input.textChanged.connect(self.log_input_changed)
-        self.log_layout.addWidget(self.log_input)
-
-        self.log_button = QPushButton("Open Folder")
-        self.log_button.clicked.connect(self.get_log_folder)
-        self.log_layout.addWidget(self.log_button)
-
-        self.layout.addLayout(self.log_layout)
-
-        #model
-        self.model_layout = QHBoxLayout()
-        self.model_label = QLabel("Model folder: ")
-        self.model_layout.addWidget(self.model_label)
-
-        self.model_input=QLineEdit()
-        #self.model_input.textChanged.connect(self.model_input_changed)
-        self.model_layout.addWidget(self.model_input)
-
-        self.model_button = QPushButton("Open Folder")
-        self.model_button.clicked.connect(self.get_model_folder)
-        self.model_layout.addWidget(self.model_button)
-
-        self.layout.addLayout(self.model_layout)
+       
 
         #blurr threshold
         self.blur_layout = QHBoxLayout()
@@ -127,17 +92,11 @@ class TrainingHelper(QWidget):
         self.process_button.setFont((QFont("Arial", 20)))
         self.button_layout.addWidget(self.process_button)
 
-        self.execute_button = QPushButton("Execute")
-        self.execute_button.clicked.connect(self.execute)
-        self.execute_button.setFont((QFont("Arial", 20)))
-        self.button_layout.addWidget(self.execute_button)
-
-        self.execute_button.setFixedHeight(60)
         self.interrupt_button.setFixedHeight(60)
         self.process_button.setFixedHeight(60)
-        self.execute_button.setStyleSheet("background-color: green")
-        self.process_button.setStyleSheet("background-color: orange")
+        self.process_button.setStyleSheet("background-color: green")
         self.interrupt_button.setStyleSheet("background-color: red")
+        self.interrupt_button.setEnabled(False)
 
         self.layout.addLayout(self.button_layout)
 
@@ -151,39 +110,43 @@ class TrainingHelper(QWidget):
         filename, _ = QFileDialog.getOpenFileName(self, caption=caption, directory=initial_dir, filter="*")
         self.video_input.setText(filename)
 
-    
-    def get_image_folder(self):
-        """Opens a file dialog and returns the selected file path of a video."""
-        initial_dir =""
-        caption=''
-        folder= QFileDialog.getExistingDirectory(self, caption=caption, directory=initial_dir)
-        self.image_input.setText(folder)
-
-    def get_log_folder(self):
-        """Opens a file dialog and returns the selected file path of a video."""
-        initial_dir =""
-        caption=''
-        folder= QFileDialog.getExistingDirectory(self, caption=caption, directory=initial_dir)
-        self.log_input.setText(folder)
-    
-    def get_model_folder(self):
-        """Opens a file dialog and returns the selected file path of a video."""
-        initial_dir =""
-        caption=''
-        folder= QFileDialog.getExistingDirectory(self, caption=caption, directory=initial_dir)
-        self.model_input.setText(folder)
-
     def update_blur_label(self):
         self.blur_label.setText("blur: "+str(self.blur_slider.value()))
     
     def interrupt(self):
-        pass
+        """Interrupt the process"""
+        self.worker.kill()
 
     def process(self):
-        pass
+        """Generate all the images and save them to a folder"""
+        self.process_button.setEnabled(False)
+        self.interrupt_button.setEnabled(True)
+        self.worker = Worker(
+            self.video_input.text(),
+            self.training_name_input.text(),
+            self.output_name_input.text(),
+            self.blur_slider.value(),
+            )
+        
+        self.worker.signals.progress.connect(self.update_progress)
+        self.worker.signals.finished.connect(self.process_finished)
+        self.worker.signals.error.connect(self.process_finished)
 
-    def execute(self):
-        pass
+    
+        # Execute
+        self.threadpool.start(self.worker)
+
+    def update_progress(self, str, progress):
+        self.progress_label.setText(f"Progress: {str}")
+        self.progress_bar.setValue(progress)
+
+    def process_finished(self):
+        self.progress_label.setText("Finished!")
+        self.progress_bar.setValue(0)
+        self.interrupt_button.setEnabled(False)
+        self.process_button.setEnabled(True)
+        
+
 
 
         

@@ -107,11 +107,9 @@ class MainWindow(QMainWindow):
         self.generation_window.video_output_signal.connect(self.video_player.update_video)
         self.file_menu.generation_signal.connect(self.generation_window.handle_file_menu_signal)
 
-        #########################################################
-        self.generation_window.handle_file_menu_signal()
+        
 
         
-        #tabs.setCurrentIndex(1)
 
         self.setCentralWidget(tabs)
 
